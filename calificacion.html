@@ -18,31 +18,67 @@ fetch("navbar.html")
 <div class="container mt-4">
     <h1>Determinar la calificación</h1>
 
-    <form class="mt-4">
+    <form class="mt-4" onsubmit="calificar(); return false;">
         <div class="mb-3">
             <label class="form-label">Parcial 1</label>
-            <input type="number" class="form-control">
+            <input type="number"  id="par1"class="form-control" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Parcial 2</label>
-            <input type="number" class="form-control">
+            <input type="number"  id="par2" class="form-control" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Parcial 3</label>
-            <input type="number" class="form-control">
+            <input type="number" id="par3" class="form-control" required>
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Semestral</label>
-            <input type="number" class="form-control">
-        </div>
-
-        <button class="btn btn-primary">Calcular</button>
+        <button type="submit" class="btn btn-primary">calcular</button>
     </form>
+    <div id="mensaje"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function mostrarMensaje(tipo, texto) {
+            const mensaje = document.getElementById("mensaje");
+            mensaje.className = `alert alert-${tipo}`;
+            mensaje.textContent = texto;
+    }
+    function calificar(){
+    const parcial1 = document.getElementById("par1").value;
+    const parcial2 = document.getElementById("par2").value;
+    const parcial3 = document.getElementById("par3").value;
+
+    const p1 = parseFloat(parcial1);
+    const p2 = parseFloat(parcial2);
+    const p3 = parseFloat(parcial3);
+
+    if (p1 < 0 || p2 < 0 || p3 < 0) {
+        mostrarMensaje('error', 'Por favor, ingrese valores numéricos válidos y positivos');
+        return;
+    }
+
+    if (p1 > 100 || p2 > 100 || p3 > 100) {
+        mostrarMensaje('warning', 'No debe colocar números mayores a 100');
+        return;
+    }
+
+    const promedioParciales = (p1 + p2 + p3) / 3;
+    const notaParcial = promedioParciales * 0.60;
+
+    const faltaParaA = 91 - notaParcial;
+    const faltaParaB = 81 - notaParcial;
+    const faltaParaC = 71 - notaParcial;
+    const faltaParaD = 61 - notaParcial;
+
+    mostrarMensaje('Success', `
+        Le falta para una A : ${faltaParaA} 
+        Le falta para una B : ${faltaParaB}
+        Le falta para una C : ${faltaParaC}
+        Le falta para una D : ${faltaParaD}
+    `);
+}
+</script>
 </body>
 </html>
